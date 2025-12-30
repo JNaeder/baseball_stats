@@ -36,6 +36,7 @@ export type playerStats = {
   SO: number;
   AVG: number;
   OBP: number;
+  SLG: number;
   "RBI/PA": number;
 };
 

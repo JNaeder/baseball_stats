@@ -83,7 +83,7 @@ export const columns: ColumnDef<playerStats>[] = [
     header: ({ column }) => <SortableHeader label="OBP" column={column} />,
   },
   {
-    accessorKey: "RBI/PA",
-    header: ({ column }) => <SortableHeader label="RBI/PA" column={column} />,
+    accessorKey: "SLG",
+    header: ({ column }) => <SortableHeader label="SLG" column={column} />,
   },
 ];

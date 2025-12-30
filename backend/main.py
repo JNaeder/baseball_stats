@@ -34,8 +34,8 @@ def get_player_stats(player_id):
     return player_data
 
 
-# if __name__ == "__main__":
-#     stats.get_player_data(player_id=666624)
+if __name__ == "__main__":
+    stats.get_player_data(player_id=666624)
 # stats.get_team_sos(team_id=121, year=2025)
 
 # team_id = 133

@@ -90,8 +90,15 @@ def get_player_data(player_id):
                 "PA": stats.get("plateAppearances"),
                 "RBI": stats.get("rbi"),
                 "SF": stats.get("sacFlies"),
+                "AVG": stats.get("avg"),
+                "OBP": stats.get("obp"),
+                "SLG": stats.get("slg"),
             }
         )
+    # df = pd.DataFrame(all_seasons)
+    # # Replace NaN values with None for JSON serialization compatibility
+    # df = df.where(pd.notna(df), None)
+    # player_data["stats"] = df.to_dict(orient="records")
     player_data["stats"] = all_seasons
 
     return player_data

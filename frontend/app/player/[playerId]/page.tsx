@@ -2,6 +2,7 @@ import type { playerData } from "@/app/types";
 import Image from "next/image";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
+import MyChart from "./chart";
 
 export default async function page({
   params,
@@ -42,8 +43,9 @@ export default async function page({
             <b>Bats:</b> {playerData.bats}
           </div>
         </div>
+        <MyChart playerStats={playerData.stats} />
       </div>
-      <div>
+      <div className="px-10 pt-5 flex-1">
         <DataTable columns={columns} data={playerData.stats} />
       </div>
     </div>
