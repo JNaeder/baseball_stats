@@ -1,13 +1,15 @@
 "use client";
 
-import type { player } from "./types";
+import type { playerStats } from "./types";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { useState, useEffect } from "react";
+import { DataTable } from "./data-table";
+import { columns } from "./columns";
 
 export default function Home() {
   const [year, setYear] = useState<number>(2025);
-  const [playerData, setPlayerData] = useState<player[]>([]);
+  const [playerData, setPlayerData] = useState<playerStats[]>([]);
   const getData = async () => {
     const res = await fetch(
       `http://127.0.0.1:8000/all_player_stats_by_year/${year}`
@@ -21,7 +23,7 @@ export default function Home() {
   }, []);
 
   return (
-    <div>
+    <div className="flex flex-col h-dvh">
       <div>John's Baseball Stuff</div>
       <div className="flex flex-col w-100">
         <Input
@@ -31,13 +33,9 @@ export default function Home() {
         />
         <Button onClick={() => getData()}>Refresh</Button>
       </div>
-      {playerData.map((player: player, i: number) => {
-        return (
-          <div key={i}>
-            {player.Name} - {player.HR} ({player.Team}) ({player.Age})
-          </div>
-        );
-      })}
+      <div className="px-10 pt-5 flex-1">
+        <DataTable columns={columns} data={playerData} />
+      </div>
     </div>
   );
 }
