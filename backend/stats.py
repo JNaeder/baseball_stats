@@ -26,7 +26,7 @@ class Stats:
         }
         res = self.get_data(endpoint=endpoint, params=params)
         data = res.get("stats", [])[0].get("splits", [])
-        arr = []
+        all_player_data = []
 
         for d in data:
             stat = d.get("stat")
@@ -51,9 +51,9 @@ class Stats:
                 "RBI": stat.get("rbi"),
                 "SF": stat.get("sacFlies"),
             }
-            arr.append(new_data)
+            all_player_data.append(new_data)
 
-        return pd.DataFrame(arr)
+        return pd.DataFrame(all_player_data)
 
     def get_team_stats(self, year=2025):
         leagues = [103, 104]
@@ -93,7 +93,6 @@ class Stats:
             "hydrate": "linescore",
         }
         res = self.get_data(endpoint=endpoint, params=params)
-        # print(res)
         games_list = []
 
         for date in res.get("dates", []):

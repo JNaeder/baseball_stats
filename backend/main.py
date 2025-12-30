@@ -1,5 +1,32 @@
 from stats import Stats
 from helper_data import team_data
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
+
+app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+@app.get("/all_player_stats_by_year/{year}")
+def test_api(year):
+    player_data = Stats().get_player_stats(year=year)
+    sorted_data = (
+        player_data.loc[
+            :,
+            ["Name", "Team", "Age", "AB", "H", "HR", "RBI"],
+        ]
+        .sort_values(by="HR", ascending=False)
+        .head(20)
+    )
+
+    return sorted_data.to_dict(orient="records")
 
 
 if __name__ == "__main__":
@@ -44,15 +71,22 @@ if __name__ == "__main__":
 
     # data["SO/H"] = round(data["SO"] / data["H"], 3)
 
-    # # print(data.loc[(data["TeamId"].map(team_playoffs) == False) & (data["PA"] > 300) & (data["Age"] >= 30), ["Name", "Team", "Age", "OPS"]].sort_values(by="OPS", ascending=False).head(10))
-    # # print(
-    # #     data.loc[
-    # #         (data["PA"] > 500),
-    # #         ["Name", "SO/H", "OBP", "AVG", "PA"],
-    # #     ]
-    # #     .sort_values(by="SO/H", ascending=True)
-    # #     .head(10)
-    # # )
+    # print(
+    #     data.loc[
+    #         (data["TeamId"].map(team_playoffs) == False) & (data["PA"] > 300),
+    #         ["Name", "Team", "Age", "OPS"],
+    #     ]
+    #     .sort_values(by="OPS", ascending=False)
+    #     .head(10)
+    # )
+    # print(
+    #     data.loc[
+    #         (data["PA"] > 500),
+    #         ["Name", "SO/H", "OBP", "AVG", "PA"],
+    #     ]
+    #     .sort_values(by="SO/H", ascending=False)
+    #     .head(10)
+    # )
 
     # result = (
     #     data.loc[data["PA"] > 200]
