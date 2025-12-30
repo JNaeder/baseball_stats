@@ -7,10 +7,10 @@ class Stats:
     def __init__(self):
         self._base_url = "https://statsapi.mlb.com"
 
-    def get_data(self, endpoint: str, params: Dict[str:str]):
+    def get_data(self, endpoint: str, params: Dict[str, str]):
         resp = requests.get(self._base_url + endpoint, params=params)
         if resp.status_code != 200:
-            return
+            return {}
 
         return resp.json()
 
@@ -82,3 +82,49 @@ class Stats:
                         }
                     )
         return pd.DataFrame(all_standings)
+
+    def get_team_schedule_data(self, teamId, year):
+        endpoint = "/api/v1/schedule"
+        params = {
+            "sportId": 1,
+            "teamId": teamId,
+            "season": year,
+            "gameType": "R",
+            "hydrate": "linescore",
+        }
+        res = self.get_data(endpoint=endpoint, params=params)
+        # print(res)
+        games_list = []
+
+        for date in res.get("dates", []):
+            for game in date.get("games", []):
+                if game.get("status", {}).get("detailedState") != "Final":
+                    continue
+                teams = game.get("teams", {})
+                is_home = teams["home"]["team"]["id"] == teamId
+                main_team = teams["home"] if is_home else teams["away"]
+                opp_team = teams["away"] if is_home else teams["home"]
+
+                games_list.append(
+                    {
+                        "Date": game.get("officialDate"),
+                        "RunsScored": main_team.get("score", 0),
+                        "RunsAllowed": opp_team.get("score", 0),
+                        "OppTeam": opp_team.get("team", {}).get("name", "n/a"),
+                        "IsWin": 1 if main_team.get("isWinner") else 0,
+                    }
+                )
+
+        df = pd.DataFrame(games_list)
+        df["Game_Number"] = df.index + 1
+        df["Cum_Wins"] = df["IsWin"].cumsum()
+        df["Cum_Losses"] = df["Game_Number"] - df["Cum_Wins"]
+        df["Cum_Runs_Scored"] = df["RunsScored"].cumsum()
+        df["Cum_Runs_Allowed"] = df["RunsAllowed"].cumsum()
+        df["Win%"] = (df["Cum_Wins"] / df["Game_Number"]).round(3)
+        df["xWin%"] = (
+            (df["Cum_Runs_Scored"] ** 1.83)
+            / (df["Cum_Runs_Scored"] ** 1.83 + df["Cum_Runs_Allowed"] ** 1.83)
+        ).round(3)
+
+        return df
