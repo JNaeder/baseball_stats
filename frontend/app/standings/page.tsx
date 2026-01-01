@@ -31,6 +31,10 @@ export default function page() {
               <div>{teamstanding.Name}</div>
               <div>W%: {teamstanding["W%"].toFixed(3)} </div>
               <div>xW%: {teamstanding["xW%"].toFixed(3)} </div>
+              <div>
+                Diff:{" "}
+                {((teamstanding["W%"] - teamstanding["xW%"]) * 100).toFixed(3)}{" "}
+              </div>
             </div>
           );
         })}

@@ -27,6 +27,9 @@ export default async function page({
         />
         <div className="ml-5">
           <div className="text-5xl">{playerData.name}</div>
+          <div className=" bg-blue-400 rounded-2xl text-center font-bold border-black border-2 w-fit px-4">
+            {playerData.position}
+          </div>
           <div>
             <b>Place of Birth:</b> {playerData.birthCountry}
           </div>

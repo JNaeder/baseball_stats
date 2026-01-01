@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import type { playerStats } from "./types";
+import type { playerStats } from "@/app/types";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -12,7 +12,6 @@ const SortableHeader = ({ label, column }: { label: string; column: any }) => (
     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
   >
     {label}
-    <ArrowUpDown className="ml-2 h-4 w-4" />
   </Button>
 );
 
@@ -90,14 +89,25 @@ export const columns: ColumnDef<playerStats>[] = [
   {
     accessorKey: "AVG",
     header: ({ column }) => <SortableHeader label="AVG" column={column} />,
-    cell: ({ getValue }) => getValue<number>().toFixed(3),
   },
   {
     accessorKey: "OBP",
     header: ({ column }) => <SortableHeader label="OBP" column={column} />,
   },
   {
-    accessorKey: "RBI/PA",
-    header: ({ column }) => <SortableHeader label="RBI/PA" column={column} />,
+    accessorKey: "SLG",
+    header: ({ column }) => <SortableHeader label="SLG" column={column} />,
+  },
+  {
+    accessorKey: "OPS",
+    header: ({ column }) => <SortableHeader label="OPS" column={column} />,
+  },
+  {
+    accessorKey: "ISO",
+    header: ({ column }) => <SortableHeader label="ISO" column={column} />,
+  },
+  {
+    accessorKey: "wOBA",
+    header: ({ column }) => <SortableHeader label="wOBA" column={column} />,
   },
 ];

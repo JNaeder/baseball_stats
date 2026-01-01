@@ -31,59 +31,87 @@ export const columns: ColumnDef<playerStats>[] = [
   },
   {
     accessorKey: "G",
-    header: ({ column }) => <SortableHeader label="G" column={column} />,
+    header: "G",
     size: 10,
   },
   {
     accessorKey: "PA",
-    header: ({ column }) => <SortableHeader label="PA" column={column} />,
+    header: "PA",
     size: 10,
   },
   {
     accessorKey: "AB",
-    header: ({ column }) => <SortableHeader label="AB" column={column} />,
+    header: "AB",
     size: 10,
   },
   {
     accessorKey: "R",
-    header: ({ column }) => <SortableHeader label="R" column={column} />,
+    header: "R",
     size: 10,
   },
   {
     accessorKey: "H",
-    header: ({ column }) => <SortableHeader label="H" column={column} />,
+    header: "H",
     size: 10,
   },
   {
     accessorKey: "2B",
-    header: ({ column }) => <SortableHeader label="2B" column={column} />,
+    header: "2B",
     size: 10,
   },
   {
     accessorKey: "3B",
-    header: ({ column }) => <SortableHeader label="3B" column={column} />,
+    header: "3B",
     size: 10,
   },
   {
     accessorKey: "HR",
-    header: ({ column }) => <SortableHeader label="HR" column={column} />,
+    header: "HR",
     size: 10,
   },
   {
     accessorKey: "RBI",
-    header: ({ column }) => <SortableHeader label="RBI" column={column} />,
+    header: "RBI",
     size: 10,
   },
   {
+    accessorKey: "BB",
+    header: "BB",
+    size: 10,
+  },
+  {
+    accessorKey: "BB%",
+    header: "BB%",
+    cell: ({ getValue }) => `${getValue<number>()} %`,
+  },
+  {
+    accessorKey: "SO",
+    header: "SO",
+    size: 10,
+  },
+  {
+    accessorKey: "SO%",
+    header: "SO%",
+    cell: ({ getValue }) => `${getValue<number>()} %`,
+  },
+  {
     accessorKey: "AVG",
-    header: ({ column }) => <SortableHeader label="AVG" column={column} />,
+    header: "AVG",
   },
   {
     accessorKey: "OBP",
-    header: ({ column }) => <SortableHeader label="OBP" column={column} />,
+    header: "OBP",
   },
   {
     accessorKey: "SLG",
-    header: ({ column }) => <SortableHeader label="SLG" column={column} />,
+    header: "SLG",
+  },
+  {
+    accessorKey: "ISO",
+    header: "ISO",
+  },
+  {
+    accessorKey: "wOBA",
+    header: "wOBA",
   },
 ];

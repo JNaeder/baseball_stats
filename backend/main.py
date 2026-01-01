@@ -3,6 +3,7 @@ from helper_data import team_data
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
+
 app = FastAPI()
 
 app.add_middleware(
@@ -15,10 +16,27 @@ app.add_middleware(
 
 
 @app.get("/all_player_stats_by_year/{year}")
-def get_all_player_stats_by_year(year):
-    player_data = stats.get_all_player_hitting_stats(year=year)
-    sorted_data = player_data.loc[(player_data["PA"] > 300)]
-    return sorted_data.to_dict(orient="records")
+def get_all_player_stats_by_year(year, min_pa=500, team_id=None):
+    player_data = stats.get_all_player_hitting_stats(year=year, team_id=team_id)
+    sorted_data = player_data.loc[(player_data["PA"] > int(min_pa))]
+    output = {
+        "summary": {
+            "player_count": len(sorted_data),
+            "avg_AVG": round(
+                int(sorted_data["H"].sum()) / int(sorted_data["AB"].sum()), 3
+            ),
+            "avg_OBP": round(sorted_data["OBP"].mean(), 3),
+            "avg_SLG": round(sorted_data["SLG"].mean(), 3),
+            "avg_OPS": round(sorted_data["OPS"].mean(), 3),
+            "avg_wOBA": round(sorted_data["wOBA"].mean(), 3),
+            "total_HR": int(sorted_data["HR"].sum()),
+            "total_H": int(sorted_data["H"].sum()),
+            "total_RBI": int(sorted_data["RBI"].sum()),
+            "total_R": int(sorted_data["R"].sum()),
+        },
+        "player_data": sorted_data.to_dict(orient="records"),
+    }
+    return output
 
 
 @app.get("/all_standings_by_year/{year}")
@@ -34,8 +52,11 @@ def get_player_stats(player_id):
     return player_data
 
 
-if __name__ == "__main__":
-    stats.get_player_data(player_id=666624)
+# if __name__ == "__main__":
+#     # api.get_team_schedule()
+#     api.get_game_live_feed(gameId=778563)
+# stats.get_all_player_hitting_stats()
+# stats.get_player_data(player_id=553993)
 # stats.get_team_sos(team_id=121, year=2025)
 
 # team_id = 133

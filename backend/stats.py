@@ -1,9 +1,12 @@
 import pandas as pd
 import api
+from stat_formulas import *
 
 
-def get_all_player_hitting_stats(year=2025, sportId=1):
-    raw_data = api.get_all_player_stats(year=year, group="hitting", sportId=sportId)
+def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
+    raw_data = api.get_all_player_stats(
+        year=year, team_id=team_id, group="hitting", sportId=sportId
+    )
     all_player_data = []
 
     for data in raw_data:
@@ -24,9 +27,10 @@ def get_all_player_hitting_stats(year=2025, sportId=1):
             "3B": stat.get("triples"),
             "HR": stat.get("homeRuns"),
             "SO": stat.get("strikeOuts"),
-            "BB": stat.get("baseOnBalls"),
             "H": stat.get("hits"),
+            "BB": stat.get("baseOnBalls"),
             "HBP": stat.get("hitByPitch"),
+            "IBB": stat.get("intentionalWalks"),
             "AB": stat.get("atBats"),
             "PA": stat.get("plateAppearances"),
             "RBI": stat.get("rbi"),
@@ -34,14 +38,18 @@ def get_all_player_hitting_stats(year=2025, sportId=1):
         }
         all_player_data.append(parsed_data)
 
-    df = pd.DataFrame(all_player_data)
-
-    df["AVG"] = (df["H"] / df["AB"]).round(3)
-    df["OBP"] = (
-        (df["H"] + df["BB"] + df["HBP"]) / (df["AB"] + df["BB"] + df["HBP"] + df["SF"])
-    ).round(3)
-
-    df["RBI/PA"] = (df["RBI"] / df["PA"]).round(3)
+    df = (
+        pd.DataFrame(all_player_data)
+        .fillna("")
+        .pipe(calc_1B)
+        .pipe(calc_uBB)
+        .pipe(calc_avg)
+        .pipe(calc_obp)
+        .pipe(calc_slg)
+        .pipe(calc_ops)
+        .pipe(calc_iso)
+        .pipe(calc_woba)
+    )
 
     return df
 
@@ -58,6 +66,7 @@ def get_player_data(player_id):
         "height": data.get("height"),
         "weight": data.get("weight"),
         "active": data.get("active"),
+        "position": data.get("primaryPosition", {}).get("name"),
         "debut": data.get("mlbDebutDate"),
         "bats": data.get("batSide", {}).get("description"),
         "throws": data.get("pitchHand", {}).get("description"),
@@ -83,23 +92,30 @@ def get_player_data(player_id):
                 "3B": stats.get("triples"),
                 "HR": stats.get("homeRuns"),
                 "SO": stats.get("strikeOuts"),
-                "BB": stats.get("baseOnBalls"),
                 "H": stats.get("hits"),
+                "BB": stats.get("baseOnBalls"),
                 "HBP": stats.get("hitByPitch"),
+                "IBB": stats.get("intentionalWalks"),
                 "AB": stats.get("atBats"),
                 "PA": stats.get("plateAppearances"),
                 "RBI": stats.get("rbi"),
                 "SF": stats.get("sacFlies"),
-                "AVG": stats.get("avg"),
-                "OBP": stats.get("obp"),
-                "SLG": stats.get("slg"),
             }
         )
-    # df = pd.DataFrame(all_seasons)
-    # # Replace NaN values with None for JSON serialization compatibility
-    # df = df.where(pd.notna(df), None)
-    # player_data["stats"] = df.to_dict(orient="records")
-    player_data["stats"] = all_seasons
+    df = (
+        pd.DataFrame(all_seasons)
+        .fillna("")
+        .pipe(calc_1B)
+        .pipe(calc_uBB)
+        .pipe(calc_avg)
+        .pipe(calc_obp)
+        .pipe(calc_slg)
+        .pipe(calc_iso)
+        .pipe(calc_woba)
+        .pipe(calc_so_perc)
+        .pipe(calc_bb_perc)
+    )
+    player_data["stats"] = df.to_dict(orient="records")
 
     return player_data
 
@@ -126,7 +142,7 @@ def get_all_standings(year=2025):
                         "Clinched": bool(team.get("clinchIndicator")),
                     }
                 )
-    df = pd.DataFrame(all_standings)
+    df = pd.DataFrame(all_standings).fillna("")
 
     df["W%"] = (df["W"] / df["G"]).round(3)
     df["xW%"] = ((df["RS"] ** 1.83) / (df["RS"] ** 1.83 + df["RA"] ** 1.83)).round(3)

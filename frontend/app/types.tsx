@@ -1,3 +1,28 @@
+export type playerListResponse = {
+  summary: playerListSummary;
+  player_data: playerStats[];
+};
+
+export type playerListSummary = {
+  avg_AVG: number;
+  avg_OBP: number;
+  avg_OPS: number;
+  avg_SLG: number;
+  avg_wOBA: number;
+  player_count: number;
+  total_H: number;
+  total_HR: number;
+  total_R: number;
+  total_RBI: number;
+};
+
+export type teamData = {
+  id: number;
+  full_name: string;
+  abbreviation: string;
+  team_name: string;
+};
+
 export type playerData = {
   id: number;
   name: string;
@@ -7,6 +32,7 @@ export type playerData = {
   height: string;
   weight: number;
   active: boolean;
+  position: string;
   debut: string;
   bats: string;
   throws: string;
@@ -30,6 +56,7 @@ export type playerStats = {
   HR: number;
   BB: number;
   HBP: number;
+  IBB: number;
   RBI: number;
   R: number;
   SF: number;
@@ -37,7 +64,11 @@ export type playerStats = {
   AVG: number;
   OBP: number;
   SLG: number;
-  "RBI/PA": number;
+  ISO: number;
+  OPS: number;
+  wOBA: number;
+  "SO%": number;
+  "BB%": number;
 };
 
 export type teamStanding = {

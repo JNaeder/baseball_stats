@@ -3,7 +3,11 @@
 import type { playerStats } from "@/app/types";
 import { type ChartConfig } from "@/components/ui/chart";
 import { CartesianGrid, Line, LineChart, XAxis, YAxis } from "recharts";
-import { ChartContainer } from "@/components/ui/chart";
+import {
+  ChartContainer,
+  ChartTooltip,
+  ChartTooltipContent,
+} from "@/components/ui/chart";
 
 const chartConfig = {
   AVG: {
@@ -36,6 +40,10 @@ export default function MyChart({
         }}
       >
         <CartesianGrid vertical={false} />
+        <ChartTooltip
+          cursor={false}
+          content={<ChartTooltipContent hideLabel />}
+        />
         <XAxis
           dataKey="Age"
           tickLine={false}
@@ -43,8 +51,14 @@ export default function MyChart({
           tickMargin={8}
           tickFormatter={(value) => String(value).slice(0, 3)}
         />
-        <YAxis domain={[0.1, 0.7]} />
+        <YAxis yAxisId="left" domain={["dataMin", "dataMax"]} />
+        <YAxis
+          yAxisId="right"
+          orientation="right"
+          domain={["dataMin", "dataMax"]}
+        />
         <Line
+          yAxisId="left"
           dataKey="AVG"
           type="linear"
           stroke="var(--color-AVG)"
@@ -52,6 +66,7 @@ export default function MyChart({
           dot={false}
         />
         <Line
+          yAxisId="left"
           dataKey="OBP"
           type="linear"
           stroke="var(--color-OBP)"
@@ -59,6 +74,7 @@ export default function MyChart({
           dot={false}
         />
         <Line
+          yAxisId="left"
           dataKey="SLG"
           type="linear"
           stroke="var(--color-SLG)"
