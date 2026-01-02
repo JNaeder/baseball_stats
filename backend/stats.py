@@ -1,6 +1,7 @@
 import pandas as pd
 import api
 from stat_formulas import *
+from helper_data import *
 
 
 def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
@@ -127,12 +128,25 @@ def get_all_standings(year=2025):
     for league_id in leagues:
         records = api.get_standings_data(league_id=league_id, year=year)
         for record in records:
+            league_id = record.get("league", {}).get("id")
+            division_id = record.get("division", {}).get("id")
+
+            league_name = next(
+                (l["name"] for l in league_data if l["id"] == league_id), ""
+            )
+
+            division_name = next(
+                (d["nameShort"] for d in division_data if d["id"] == division_id), ""
+            )
+
             for team in record.get("teamRecords", []):
                 team_info = team.get("team", {})
                 all_standings.append(
                     {
                         "Id": team_info.get("id"),
                         "Name": team_info.get("name"),
+                        "League": league_name,
+                        "Division": division_name,
                         "Season": team.get("season"),
                         "G": team.get("gamesPlayed"),
                         "W": team.get("wins"),
@@ -146,6 +160,8 @@ def get_all_standings(year=2025):
 
     df["W%"] = (df["W"] / df["G"]).round(3)
     df["xW%"] = ((df["RS"] ** 1.83) / (df["RS"] ** 1.83 + df["RA"] ** 1.83)).round(3)
+    df["W%Diff"] = (df["W%"] - df["xW%"]).round(3)
+    df["RunDiff"] = df["RS"] - df["RA"]
 
     return df.sort_values(by="xW%", ascending=False)
 

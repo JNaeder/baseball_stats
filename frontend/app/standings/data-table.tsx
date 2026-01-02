@@ -23,7 +23,6 @@ import {
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[];
   data: TData[];
-  /** initial sorting state (column id and optional desc). e.g. [{ id: 'rbi', desc: true }] */
   initialSorting?: SortingState;
 }
 

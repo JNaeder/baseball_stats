@@ -82,6 +82,16 @@ export const columns: ColumnDef<playerStats>[] = [
     size: 10,
   },
   {
+    accessorKey: "BB",
+    header: ({ column }) => <SortableHeader label="BB" column={column} />,
+    size: 10,
+  },
+  {
+    accessorKey: "SO",
+    header: ({ column }) => <SortableHeader label="SO" column={column} />,
+    size: 10,
+  },
+  {
     accessorKey: "RBI",
     header: ({ column }) => <SortableHeader label="RBI" column={column} />,
     size: 10,

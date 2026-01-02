@@ -17,7 +17,9 @@ app.add_middleware(
 
 @app.get("/all_player_stats_by_year/{year}")
 def get_all_player_stats_by_year(year, min_pa=500, team_id=None):
-    player_data = stats.get_all_player_hitting_stats(year=year, team_id=team_id)
+    player_data = stats.get_all_player_hitting_stats(
+        year=year, team_id=team_id, sportId=1
+    )
     sorted_data = player_data.loc[(player_data["PA"] > int(min_pa))]
     output = {
         "summary": {
@@ -41,7 +43,7 @@ def get_all_player_stats_by_year(year, min_pa=500, team_id=None):
 
 @app.get("/all_standings_by_year/{year}")
 def get_all_standings_by_year(year):
-    team_data = stats.get_all_standings()
+    team_data = stats.get_all_standings(year=year)
 
     return team_data.to_dict(orient="records")
 
@@ -52,7 +54,8 @@ def get_player_stats(player_id):
     return player_data
 
 
-# if __name__ == "__main__":
+if __name__ == "__main__":
+    stats.get_all_standings(year=2025)
 #     # api.get_team_schedule()
 #     api.get_game_live_feed(gameId=778563)
 # stats.get_all_player_hitting_stats()

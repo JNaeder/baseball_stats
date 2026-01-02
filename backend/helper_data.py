@@ -180,3 +180,49 @@ team_data = [
         "team_name": "Mets",
     },
 ]
+
+league_data = [
+    {
+        "id": 103,
+        "name": "American League",
+        "abbreviation": "AL",
+    },
+    {
+        "id": 104,
+        "name": "National League",
+        "abbreviation": "NL",
+    },
+]
+
+division_data = [
+    {
+        "id": 200,
+        "name": "American League West",
+        "nameShort": "AL West",
+    },
+    {
+        "id": 201,
+        "name": "American League East",
+        "nameShort": "AL East",
+    },
+    {
+        "id": 202,
+        "name": "American League Central",
+        "nameShort": "AL Central",
+    },
+    {
+        "id": 203,
+        "name": "National League West",
+        "nameShort": "NL West",
+    },
+    {
+        "id": 204,
+        "name": "National League East",
+        "nameShort": "NL East",
+    },
+    {
+        "id": 205,
+        "name": "National League Central",
+        "nameShort": "NL Central",
+    },
+]
