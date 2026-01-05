@@ -10,6 +10,7 @@ const SortableHeader = ({ label, column }: { label: string; column: any }) => (
   <Button
     variant="ghost"
     onClick={() => column.toggleSorting(column.getIsSorted() === "asc")}
+    className="p-0"
   >
     {label}
   </Button>
@@ -19,7 +20,6 @@ export const columns: ColumnDef<playerStats>[] = [
   {
     accessorKey: "Name",
     header: "Name",
-    size: 10,
     cell: ({ row }) => (
       <Link
         href={`/player/${row.original.PlayerId}`}
@@ -33,10 +33,10 @@ export const columns: ColumnDef<playerStats>[] = [
     accessorKey: "Age",
     header: "Age",
   },
-  {
-    accessorKey: "Team",
-    header: "Team",
-  },
+  // {
+  //   accessorKey: "Team",
+  //   header: "Team",
+  // },
   {
     accessorKey: "Pos",
     header: "Pos",
@@ -119,5 +119,9 @@ export const columns: ColumnDef<playerStats>[] = [
   {
     accessorKey: "wOBA",
     header: ({ column }) => <SortableHeader label="wOBA" column={column} />,
+  },
+  {
+    accessorKey: "wRAA",
+    header: ({ column }) => <SortableHeader label="wRAA" column={column} />,
   },
 ];

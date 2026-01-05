@@ -29,7 +29,7 @@ export default function Filter({
   getData: () => void;
 }) {
   return (
-    <div className="flex items-center gap-5 mx-auto mt-2">
+    <div className="flex items-center justify-evenly gap-5  mt-2 w-200">
       <div className="w-fit">
         <Label htmlFor="year">Season</Label>
         <Input

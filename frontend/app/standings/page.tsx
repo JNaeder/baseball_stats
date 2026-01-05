@@ -36,7 +36,7 @@ export default function page() {
   }, []);
 
   return (
-    <div className="flex w-full">
+    <div className="flex w-full ">
       {/* <div className="w-fit">
         <Label htmlFor="year">Season</Label>
         <Input

@@ -1,7 +1,7 @@
 import pandas as pd
 import api
 from stat_formulas import *
-from helper_data import *
+from helper_data.league_data import leagues, divisions
 
 
 def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
@@ -17,6 +17,7 @@ def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
         position = data.get("position")
         parsed_data = {
             "PlayerId": player.get("id"),
+            "Season": data.get("season"),
             "Name": player.get("fullName"),
             "Team": team.get("name"),
             "TeamId": team.get("id"),
@@ -36,6 +37,7 @@ def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
             "PA": stat.get("plateAppearances"),
             "RBI": stat.get("rbi"),
             "SF": stat.get("sacFlies"),
+            "P": stat.get("numberOfPitches"),
         }
         all_player_data.append(parsed_data)
 
@@ -50,6 +52,7 @@ def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
         .pipe(calc_ops)
         .pipe(calc_iso)
         .pipe(calc_woba)
+        .pipe(calc_wraa, year)
     )
 
     return df
@@ -131,12 +134,10 @@ def get_all_standings(year=2025):
             league_id = record.get("league", {}).get("id")
             division_id = record.get("division", {}).get("id")
 
-            league_name = next(
-                (l["name"] for l in league_data if l["id"] == league_id), ""
-            )
+            league_name = next((l["name"] for l in leagues if l["id"] == league_id), "")
 
             division_name = next(
-                (d["nameShort"] for d in division_data if d["id"] == division_id), ""
+                (d["nameShort"] for d in divisions if d["id"] == division_id), ""
             )
 
             for team in record.get("teamRecords", []):

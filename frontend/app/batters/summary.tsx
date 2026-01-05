@@ -18,23 +18,20 @@ export default function Summary({
     return;
   }
   return (
-    <div>
-      <Card className="w-full bg-blue-50">
-        <CardHeader>
-          <CardTitle>Summary</CardTitle>
-        </CardHeader>
-        <CardContent>
+    <Card className="w-fit bg-blue-50">
+      <CardHeader>
+        <CardTitle>Summary</CardTitle>
+      </CardHeader>
+      <CardContent>
+        <div className="flex flex-col">
           <div>
             <b>Player Count:</b> {summary.player_count}
           </div>
-        </CardContent>
-      </Card>
-      {/* <div>AVG: {summary.avg_AVG}</div>
-      <div>OBP: {summary.avg_OBP}</div>
-      <div>SLG: {summary.avg_SLG}</div>
-      <div>H: {summary.total_H}</div>
-      <div>HR: {summary.total_HR}</div>
-      <div>RBI: {summary.total_RBI}</div> */}
-    </div>
+          <div>
+            <b>AVG:</b> {summary.avg_AVG}
+          </div>
+        </div>
+      </CardContent>
+    </Card>
   );
 }

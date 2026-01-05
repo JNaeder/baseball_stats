@@ -69,6 +69,7 @@ export type playerStats = {
   wOBA: number;
   "SO%": number;
   "BB%": number;
+  wRAA: number;
 };
 
 export type teamStanding = {
