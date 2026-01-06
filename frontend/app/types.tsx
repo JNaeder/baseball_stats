@@ -20,6 +20,7 @@ export type playerListSummary = {
 
 export type teamData = {
   id: number;
+  year: number;
   full_name: string;
   abbreviation: string;
   team_name: string;

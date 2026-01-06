@@ -1,5 +1,4 @@
 import stats
-import api
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from stat_formulas import *
@@ -57,8 +56,15 @@ def get_player_stats(player_id):
     return player_data
 
 
+@app.get("/get_team_stats/{team_id}/{year}")
+def get_team_stats(team_id, year):
+    team_data = stats.get_team_data(team_id=int(team_id), year=int(year))
+    print(team_data)
+    return team_data
+
+
 if __name__ == "__main__":
     #     # stats.get_player_data(player_id=543807)
     # stats.get_all_player_hitting_stats(year=2023)
     # stats.get_all_standings()
-    api.get_team_stats(team_id=136, year=2025)
+    stats.get_team_data(team_id=117)

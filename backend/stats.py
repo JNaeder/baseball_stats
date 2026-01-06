@@ -1,7 +1,11 @@
 import pandas as pd
 import api
 from stat_formulas import *
-from helper_data.league_data import leagues as all_leagues, divisions
+from helper_data.league_data import (
+    leagues as all_leagues,
+    divisions,
+    teams as team_data,
+)
 
 
 def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
@@ -201,7 +205,21 @@ def get_team_sos(team_id, year=2025):
 
 
 def get_team_data(team_id, year=2025):
-    pass
+    team_info = next((t for t in team_data if t["id"] == team_id), "")
+    players = []
+    data = api.get_team_stats(team_id=team_id, year=year)
+    for player in data:
+        position = player.get("position", {})
+        person = player.get("person", {})
+
+        players.append(
+            {
+                "id": person.get("id"),
+                "name": person.get("fullName"),
+            }
+        )
+    output = {"team_info": team_info, "season": year, "players": players}
+    return output
 
 
 # def get_team_schedule_data(teamId, year):

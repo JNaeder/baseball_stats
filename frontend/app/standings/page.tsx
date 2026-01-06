@@ -27,7 +27,7 @@ export default function page() {
     const res = await fetch(`http://127.0.0.1:8000/all_standings_by_year/2025`);
     const data = await res.json();
 
-    console.log(data);
+    // console.log(data);
     setTeamStandings(data);
   };
 

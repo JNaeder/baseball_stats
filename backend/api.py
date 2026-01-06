@@ -73,17 +73,17 @@ def get_team_schedule(year=2025, team_id=None):
 
 
 def get_team_stats(team_id, year=2025):
-    endpoint = f"/api/v1/teams/stats"
+    endpoint = f"/api/v1/teams/{team_id}/roster"
     params = {
         "sportId": 1,
-        "teamId": team_id,
+        "rosterType": "Active",
         "season": year,
-        "gameType": "R",
-        "group": "hitting",
+        "hydrate": f"person(stats(group=[hitting],type=[season],season={year}))",
     }
 
     res = get_data(endpoint=endpoint, params=params)
-    print(res)
+    roster = res.get("roster", [])
+    return roster
 
 
 def get_game_live_feed(gameId):

@@ -21,7 +21,7 @@ export const columns: ColumnDef<teamStanding>[] = [
     header: "Name",
     cell: ({ row }) => (
       <Link
-        href={`/teams/${row.original.Id}`}
+        href={`/teams/${row.original.Id}/${row.original.Season}`}
         className="text-blue-500 hover:underline"
       >
         {row.original.Name}
