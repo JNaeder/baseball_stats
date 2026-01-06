@@ -2,7 +2,6 @@
 
 import { ColumnDef } from "@tanstack/react-table";
 import type { playerStats } from "@/app/types";
-import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 
@@ -123,5 +122,9 @@ export const columns: ColumnDef<playerStats>[] = [
   {
     accessorKey: "wRAA",
     header: ({ column }) => <SortableHeader label="wRAA" column={column} />,
+  },
+  {
+    accessorKey: "RC",
+    header: ({ column }) => <SortableHeader label="RC" column={column} />,
   },
 ];

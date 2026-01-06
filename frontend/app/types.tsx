@@ -14,6 +14,8 @@ export type playerListSummary = {
   total_HR: number;
   total_R: number;
   total_RBI: number;
+  total_wRAA: number;
+  total_RC: number;
 };
 
 export type teamData = {
@@ -70,6 +72,7 @@ export type playerStats = {
   "SO%": number;
   "BB%": number;
   wRAA: number;
+  RC: number;
 };
 
 export type teamStanding = {

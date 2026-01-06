@@ -6,7 +6,7 @@ from typing import Dict
 def get_data(endpoint: str, params: Dict[str, str]):
     resp = requests.get("https://statsapi.mlb.com" + endpoint, params=params)
     if resp.status_code != 200:
-        return {}
+        return resp.content.decode()
 
     return resp.json()
 
@@ -70,6 +70,20 @@ def get_team_schedule(year=2025, team_id=None):
     res = get_data(endpoint=endpoint, params=params)
     dates = res.get("dates", [])
     return dates
+
+
+def get_team_stats(team_id, year=2025):
+    endpoint = f"/api/v1/teams/stats"
+    params = {
+        "sportId": 1,
+        "teamId": team_id,
+        "season": year,
+        "gameType": "R",
+        "group": "hitting",
+    }
+
+    res = get_data(endpoint=endpoint, params=params)
+    print(res)
 
 
 def get_game_live_feed(gameId):

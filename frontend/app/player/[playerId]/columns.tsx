@@ -114,4 +114,12 @@ export const columns: ColumnDef<playerStats>[] = [
     accessorKey: "wOBA",
     header: "wOBA",
   },
+  {
+    accessorKey: "wRAA",
+    header: "wRAA",
+  },
+  {
+    accessorKey: "RC",
+    header: "RC",
+  },
 ];

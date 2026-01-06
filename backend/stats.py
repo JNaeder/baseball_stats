@@ -1,7 +1,7 @@
 import pandas as pd
 import api
 from stat_formulas import *
-from helper_data.league_data import leagues, divisions
+from helper_data.league_data import leagues as all_leagues, divisions
 
 
 def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
@@ -32,11 +32,15 @@ def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
             "H": stat.get("hits"),
             "BB": stat.get("baseOnBalls"),
             "HBP": stat.get("hitByPitch"),
+            "SB": stat.get("stolenBases"),
+            "CS": stat.get("caughtStealing"),
+            "GDP": stat.get("groundIntoDoublePlay"),
             "IBB": stat.get("intentionalWalks"),
             "AB": stat.get("atBats"),
             "PA": stat.get("plateAppearances"),
             "RBI": stat.get("rbi"),
             "SF": stat.get("sacFlies"),
+            "SH": stat.get("sacBunts"),
             "P": stat.get("numberOfPitches"),
         }
         all_player_data.append(parsed_data)
@@ -52,7 +56,8 @@ def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
         .pipe(calc_ops)
         .pipe(calc_iso)
         .pipe(calc_woba)
-        .pipe(calc_wraa, year)
+        .pipe(calc_wraa)
+        .pipe(calc_rc)
     )
 
     return df
@@ -96,13 +101,17 @@ def get_player_data(player_id):
                 "3B": stats.get("triples"),
                 "HR": stats.get("homeRuns"),
                 "SO": stats.get("strikeOuts"),
+                "CS": stats.get("caughtStealing"),
+                "GDP": stats.get("groundIntoDoublePlay"),
                 "H": stats.get("hits"),
+                "SB": stats.get("stolenBases"),
                 "BB": stats.get("baseOnBalls"),
                 "HBP": stats.get("hitByPitch"),
                 "IBB": stats.get("intentionalWalks"),
                 "AB": stats.get("atBats"),
                 "PA": stats.get("plateAppearances"),
                 "RBI": stats.get("rbi"),
+                "SH": stats.get("sacBunts"),
                 "SF": stats.get("sacFlies"),
             }
         )
@@ -116,6 +125,8 @@ def get_player_data(player_id):
         .pipe(calc_slg)
         .pipe(calc_iso)
         .pipe(calc_woba)
+        .pipe(calc_wraa)
+        .pipe(calc_rc)
         .pipe(calc_so_perc)
         .pipe(calc_bb_perc)
     )
@@ -134,7 +145,9 @@ def get_all_standings(year=2025):
             league_id = record.get("league", {}).get("id")
             division_id = record.get("division", {}).get("id")
 
-            league_name = next((l["name"] for l in leagues if l["id"] == league_id), "")
+            league_name = next(
+                (l["name"] for l in all_leagues if l["id"] == league_id), ""
+            )
 
             division_name = next(
                 (d["nameShort"] for d in divisions if d["id"] == division_id), ""
@@ -185,6 +198,10 @@ def get_team_sos(team_id, year=2025):
             total_pct += float(opp_w_perc)
 
     return round(total_pct / total_games, 3)
+
+
+def get_team_data(team_id, year=2025):
+    pass
 
 
 # def get_team_schedule_data(teamId, year):

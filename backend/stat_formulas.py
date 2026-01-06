@@ -71,10 +71,28 @@ def calc_woba(df: DataFrame):
     return df
 
 
-def calc_wraa(df: DataFrame, year):
-    weights = weights_by_year[int(year)]
-    league_woba = weights["wOBA"]
-    woba_scale = weights["wOBAScale"]
-    df["wRAA"] = (((df["wOBA"] - league_woba) / woba_scale) * df["PA"]).round(3)
+def calc_wraa(df: DataFrame):
+    def row_wraa(r):
+        weights = weights_by_year[int(r["Season"])]
+        league_woba = weights["wOBA"]
+        woba_scale = weights["wOBAScale"]
+        return round(((r["wOBA"] - league_woba) / woba_scale) * r["PA"], 1)
 
+    df["wRAA"] = df.apply(row_wraa, axis=1)
+    return df
+
+
+# ((H + BB – CS + HBP – GDP) * ((1B + (2*2B) + (3*3B) + (4*HR) + (.26 * (BB – IBB + HBP)) + (.52 * (SH + SF + SB)))))
+#
+# (AB + BB + HBP + SF + SH)
+def calc_rc(df: DataFrame):
+    on_base = df["H"] + df["BB"] - df["CS"] + df["HBP"] - df["GDP"]
+    total_bases = df["1B"] + (2 * df["2B"]) + (3 * df["3B"]) + (4 * df["HR"])
+    walk_value = 0.26 * (df["BB"] - df["IBB"] + df["HBP"])
+    sacrifice_value = 0.52 * (df["SH"] + df["SF"] + df["SB"])
+    bottom = df["AB"] + df["BB"] + df["HBP"] + df["SF"] + df["SH"]
+
+    df["RC"] = round(
+        (on_base * (total_bases + walk_value + sacrifice_value)) / bottom, 1
+    )
     return df

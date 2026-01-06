@@ -45,7 +45,7 @@ export default function Home() {
           setTeamId={setTeamId}
           getData={getData}
         />
-        {/* <Summary summary={summary} /> */}
+        <Summary summary={summary} />
       </div>
       {hasLoaded ? (
         <div className="px-10 pt-5 flex-1">

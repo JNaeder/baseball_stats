@@ -1,4 +1,5 @@
 import stats
+import api
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from stat_formulas import *
@@ -35,6 +36,8 @@ def get_all_player_stats_by_year(year, min_pa=500, team_id=None):
             "total_H": int(sorted_data["H"].sum()),
             "total_RBI": int(sorted_data["RBI"].sum()),
             "total_R": int(sorted_data["R"].sum()),
+            "total_wRAA": round((sorted_data["wRAA"].sum()), 3),
+            "total_RC": round(sorted_data["RC"].sum(), 1),
         },
         "player_data": sorted_data.to_dict(orient="records"),
     }
@@ -54,6 +57,8 @@ def get_player_stats(player_id):
     return player_data
 
 
-# if __name__ == "__main__":
-#     # stats.get_player_data(player_id=543807)
-#     stats.get_all_player_hitting_stats(year=2023)
+if __name__ == "__main__":
+    #     # stats.get_player_data(player_id=543807)
+    # stats.get_all_player_hitting_stats(year=2023)
+    # stats.get_all_standings()
+    api.get_team_stats(team_id=136, year=2025)

@@ -4,6 +4,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import type { teamStanding } from "@/app/types";
 import { Button } from "@/components/ui/button";
 import { CircleCheckBig } from "lucide-react";
+import Link from "next/link";
 
 const SortableHeader = ({ label, column }: { label: string; column: any }) => (
   <Button
@@ -17,7 +18,15 @@ const SortableHeader = ({ label, column }: { label: string; column: any }) => (
 export const columns: ColumnDef<teamStanding>[] = [
   {
     accessorKey: "Name",
-    header: "Team",
+    header: "Name",
+    cell: ({ row }) => (
+      <Link
+        href={`/teams/${row.original.Id}`}
+        className="text-blue-500 hover:underline"
+      >
+        {row.original.Name}
+      </Link>
+    ),
   },
   {
     accessorKey: "Clinched",

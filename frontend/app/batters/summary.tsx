@@ -25,11 +25,14 @@ export default function Summary({
       <CardContent>
         <div className="flex flex-col">
           <div>
+            <b>Total RC:</b> {summary.total_RC}
+          </div>
+          {/* <div>
             <b>Player Count:</b> {summary.player_count}
           </div>
           <div>
             <b>AVG:</b> {summary.avg_AVG}
-          </div>
+          </div> */}
         </div>
       </CardContent>
     </Card>

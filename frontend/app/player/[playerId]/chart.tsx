@@ -59,28 +59,36 @@ export default function MyChart({
         />
         <Line
           yAxisId="left"
-          dataKey="AVG"
+          dataKey="wOBA"
           type="linear"
           stroke="var(--color-AVG)"
           strokeWidth={2}
           dot={false}
         />
-        <Line
+        {/* <Line
+          yAxisId="left"
+          dataKey="AVG"
+          type="linear"
+          stroke="var(--color-AVG)"
+          strokeWidth={2}
+          dot={false}
+        /> */}
+        {/* <Line
           yAxisId="left"
           dataKey="OBP"
           type="linear"
           stroke="var(--color-OBP)"
           strokeWidth={2}
           dot={false}
-        />
-        <Line
+        /> */}
+        {/* <Line
           yAxisId="left"
           dataKey="SLG"
           type="linear"
           stroke="var(--color-SLG)"
           strokeWidth={2}
           dot={false}
-        />
+        /> */}
       </LineChart>
     </ChartContainer>
   );
