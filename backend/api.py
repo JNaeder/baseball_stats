@@ -22,7 +22,7 @@ def get_all_player_stats(
         "season": year,
         "playerPool": "all",
         "limit": 1000,
-        "hydrate": "hydrations",
+        "hydrate": "person,team",
     }
 
     if team_id:

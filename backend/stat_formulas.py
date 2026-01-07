@@ -52,7 +52,7 @@ def calc_bb_perc(df: DataFrame):
 
 def calc_woba(df: DataFrame):
     def row_woba(r):
-        weights = weights_by_year[int(r["Season"])]
+        weights = weights_by_year[int(r["season"])]
         num = (
             (r["uBB"] * weights["wBB"])
             + (r["HBP"] * weights["wHBP"])
@@ -73,7 +73,7 @@ def calc_woba(df: DataFrame):
 
 def calc_wraa(df: DataFrame):
     def row_wraa(r):
-        weights = weights_by_year[int(r["Season"])]
+        weights = weights_by_year[int(r["season"])]
         league_woba = weights["wOBA"]
         woba_scale = weights["wOBAScale"]
         return round(((r["wOBA"] - league_woba) / woba_scale) * r["PA"], 1)

@@ -6,6 +6,7 @@ from helper_data.league_data import (
     divisions,
     teams as team_data,
 )
+from grab_functions import *
 
 
 def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
@@ -15,56 +16,36 @@ def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
     all_player_data = []
 
     for data in raw_data:
-        stat = data.get("stat")
-        team = data.get("team")
-        player = data.get("player")
-        position = data.get("position")
+        stat_data = grab_stat_data(data.get("stat"))
+        team_data = grab_team_data(data.get("team"))
+        player_data = grab_player_data(data.get("player"))
+        position_data = grab_position_data(data.get("position"))
         parsed_data = {
-            "PlayerId": player.get("id"),
-            "Season": data.get("season"),
-            "Name": player.get("fullName"),
-            "Team": team.get("name"),
-            "TeamId": team.get("id"),
-            "Pos": position.get("abbreviation"),
-            "Age": stat.get("age"),
-            "G": stat.get("gamesPlayed"),
-            "R": stat.get("runs"),
-            "2B": stat.get("doubles"),
-            "3B": stat.get("triples"),
-            "HR": stat.get("homeRuns"),
-            "SO": stat.get("strikeOuts"),
-            "H": stat.get("hits"),
-            "BB": stat.get("baseOnBalls"),
-            "HBP": stat.get("hitByPitch"),
-            "SB": stat.get("stolenBases"),
-            "CS": stat.get("caughtStealing"),
-            "GDP": stat.get("groundIntoDoublePlay"),
-            "IBB": stat.get("intentionalWalks"),
-            "AB": stat.get("atBats"),
-            "PA": stat.get("plateAppearances"),
-            "RBI": stat.get("rbi"),
-            "SF": stat.get("sacFlies"),
-            "SH": stat.get("sacBunts"),
-            "P": stat.get("numberOfPitches"),
+            "season": data.get("season"),
+            "stats": stat_data,
+            "team": team_data,
+            "player": player_data,
+            "position": position_data,
         }
         all_player_data.append(parsed_data)
 
-    df = (
-        pd.DataFrame(all_player_data)
-        .fillna("")
-        .pipe(calc_1B)
-        .pipe(calc_uBB)
-        .pipe(calc_avg)
-        .pipe(calc_obp)
-        .pipe(calc_slg)
-        .pipe(calc_ops)
-        .pipe(calc_iso)
-        .pipe(calc_woba)
-        .pipe(calc_wraa)
-        .pipe(calc_rc)
-    )
+    # df = (
+    #     pd.DataFrame(all_player_data)
+    #     .fillna("")
+    #     .pipe(calc_1B)
+    #     .pipe(calc_uBB)
+    #     .pipe(calc_avg)
+    #     .pipe(calc_obp)
+    #     .pipe(calc_slg)
+    #     .pipe(calc_ops)
+    #     .pipe(calc_iso)
+    #     .pipe(calc_woba)
+    #     .pipe(calc_wraa)
+    #     .pipe(calc_rc)
+    # )
 
-    return df
+    # return df
+    return all_player_data
 
 
 def get_player_data(player_id):

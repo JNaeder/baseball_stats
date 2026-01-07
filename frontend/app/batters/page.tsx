@@ -1,20 +1,20 @@
 "use client";
 
-import type { playerStats } from "@/app/types";
+import type { playerData } from "@/types/playerTypes";
 import { useState, useEffect } from "react";
 import { Spinner } from "@/components/ui/spinner";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import Filter from "./filters";
 import Summary from "./summary";
-import type { playerListResponse, playerListSummary } from "@/app/types";
+import type { playerListResponse, playerListSummary } from "@/types/types";
 
 export default function Home() {
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
   const [year, setYear] = useState<number>(2025);
   const [minPA, setMinPA] = useState<number>(300);
   const [teamId, setTeamId] = useState<number | null>(null);
-  const [playerData, setPlayerData] = useState<playerStats[]>([]);
+  const [playerData, setPlayerData] = useState<playerData[]>([]);
   const [summary, setSummary] = useState<playerListSummary>();
 
   const getData = async () => {
@@ -25,6 +25,7 @@ export default function Home() {
       }`
     );
     const data: playerListResponse = await res.json();
+    console.log(data);
     setSummary(data.summary);
     setPlayerData(data.player_data);
     setHasLoaded(true);
@@ -45,7 +46,7 @@ export default function Home() {
           setTeamId={setTeamId}
           getData={getData}
         />
-        <Summary summary={summary} />
+        {/* <Summary summary={summary} /> */}
       </div>
       {hasLoaded ? (
         <div className="px-10 pt-5 flex-1">
