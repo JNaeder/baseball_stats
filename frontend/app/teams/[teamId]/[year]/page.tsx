@@ -1,4 +1,4 @@
-import type { teamData } from "@/app/types";
+import type { teamData } from "@/types/teamTypes";
 
 export default async function page({
   params,
@@ -18,7 +18,7 @@ export default async function page({
   console.log(data);
   return (
     <div>
-      {season} {teamData.full_name}
+      {season} {teamData.fullName}
       {players.map((player, i: number) => (
         <div key={i}>{player["name"]}</div>
       ))}

@@ -68,8 +68,8 @@ def get_team_stats(team_id, year):
     return team_data
 
 
-if __name__ == "__main__":
-    #     # stats.get_player_data(player_id=543807)
-    stats.get_all_player_hitting_stats(year=2025)
-    # stats.get_all_standings()
-    # stats.get_team_data(team_id=117)
+# if __name__ == "__main__":
+#     stats.get_player_data(player_id=543807)
+# stats.get_all_player_hitting_stats(year=2025)
+# stats.get_all_standings()
+# stats.get_team_data(team_id=117)

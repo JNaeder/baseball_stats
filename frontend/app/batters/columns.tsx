@@ -32,10 +32,10 @@ export const columns: ColumnDef<playerData>[] = [
     accessorKey: "player.currentAge",
     header: "Age",
   },
-  // {
-  //   accessorKey: "Team",
-  //   header: "Team",
-  // },
+  {
+    accessorKey: "team.abbreviation",
+    header: "Team",
+  },
   {
     accessorKey: "position.abbreviation",
     header: "Pos",

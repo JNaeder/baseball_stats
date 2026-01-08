@@ -1,5 +1,17 @@
 import type { teamData } from "./teamTypes";
 
+export type SinglePlayerData = {
+  player: playerInfo;
+  position: positionInfo;
+  stats: SinglePlayerStats[];
+};
+
+export type SinglePlayerStats = {
+  season: number;
+  stats: playerStats;
+  team: teamData;
+};
+
 export type playerData = {
   season: number;
   stats: playerStats;

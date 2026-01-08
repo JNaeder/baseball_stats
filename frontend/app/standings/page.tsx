@@ -1,5 +1,5 @@
 "use client";
-import type { teamStanding } from "../types";
+import type { teamStanding } from "@/types/teamTypes";
 
 import { useState, useEffect } from "react";
 import { DataTable } from "./data-table";

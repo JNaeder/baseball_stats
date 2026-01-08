@@ -1,4 +1,4 @@
-import type { playerData } from "@/app/types";
+import type { SinglePlayerData } from "@/types/playerTypes";
 import Image from "next/image";
 import { DataTable } from "./data-table";
 import { columns } from "./columns";
@@ -12,8 +12,11 @@ export default async function page({
   const playerId = (await params).playerId;
   const res = await fetch(`http://127.0.0.1:8000/get_player_stats/${playerId}`);
 
-  const playerData: playerData = await res.json();
-  // console.log(playerData);
+  const allData: SinglePlayerData = await res.json();
+  const playerData = allData.player;
+  const positionData = allData.position;
+  const playerStats = allData.stats;
+  // console.log(playerStats);
 
   return (
     <div>
@@ -21,20 +24,20 @@ export default async function page({
         <Image
           className="rounded-2xl border-2 border-black"
           src={playerData.photo_url}
-          alt={`${playerData.name}'s Photo`}
+          alt={`${playerData.fullName}'s Photo`}
           width={100}
           height={100}
         />
         <div className="ml-5">
-          <div className="text-5xl">{playerData.name}</div>
+          <div className="text-5xl">{playerData.fullName}</div>
           <div className=" bg-blue-400 rounded-2xl text-center font-bold border-black border-2 w-fit px-4">
-            {playerData.position}
+            {positionData.name}
           </div>
           <div>
             <b>Place of Birth:</b> {playerData.birthCountry}
           </div>
           <div>
-            <b>DOB:</b> {playerData.birthdate}
+            <b>DOB:</b> {playerData.birthDate}
           </div>
           <div>
             <b>Age:</b> {playerData.currentAge}
@@ -46,10 +49,10 @@ export default async function page({
             <b>Bats:</b> {playerData.bats}
           </div>
         </div>
-        <MyChart playerStats={playerData.stats} />
+        {/* <MyChart playerStats={playerData.stats} /> */}
       </div>
       <div className="px-10 pt-5 flex-1">
-        <DataTable columns={columns} data={playerData.stats} />
+        <DataTable columns={columns} data={playerStats} />
       </div>
     </div>
   );

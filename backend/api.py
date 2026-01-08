@@ -36,7 +36,7 @@ def get_all_player_stats(
 def get_player_data(player_id):
     # endpoint = f"/api/v1/people/{player_id}/stats"
     endpoint = f"/api/v1/people/{player_id}"
-    params = {"sportId": 1, "hydrate": "stats(group=[hitting],type=[yearByYear])"}
+    params = {"sportId": 1, "hydrate": "stats(group=[hitting],type=[yearByYear]),team"}
 
     res = get_data(endpoint=endpoint, params=params)
     data = res.get("people", [])[0]

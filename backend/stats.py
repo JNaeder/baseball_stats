@@ -14,35 +14,40 @@ def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
         year=year, team_id=team_id, group="hitting", sportId=sportId
     )
     all_player_data = []
+    all_player_stats = []
 
     for data in raw_data:
         stat_data = grab_stat_data(data.get("stat"))
+        stat_data["season"] = data.get("season")
         team_data = grab_team_data(data.get("team"))
         player_data = grab_player_data(data.get("player"))
         position_data = grab_position_data(data.get("position"))
         parsed_data = {
             "season": data.get("season"),
-            "stats": stat_data,
             "team": team_data,
             "player": player_data,
             "position": position_data,
         }
+        all_player_stats.append(stat_data)
         all_player_data.append(parsed_data)
 
-    # df = (
-    #     pd.DataFrame(all_player_data)
-    #     .fillna("")
-    #     .pipe(calc_1B)
-    #     .pipe(calc_uBB)
-    #     .pipe(calc_avg)
-    #     .pipe(calc_obp)
-    #     .pipe(calc_slg)
-    #     .pipe(calc_ops)
-    #     .pipe(calc_iso)
-    #     .pipe(calc_woba)
-    #     .pipe(calc_wraa)
-    #     .pipe(calc_rc)
-    # )
+    df = (
+        pd.DataFrame(all_player_stats)
+        .fillna("")
+        .pipe(calc_1B)
+        .pipe(calc_uBB)
+        .pipe(calc_avg)
+        .pipe(calc_obp)
+        .pipe(calc_slg)
+        .pipe(calc_ops)
+        .pipe(calc_iso)
+        .pipe(calc_woba)
+        .pipe(calc_wraa)
+        .pipe(calc_rc)
+    )
+    df_stat_data = df.to_dict(orient="records")
+    for i in range(len(all_player_data)):
+        all_player_data[i]["stats"] = df_stat_data[i]
 
     # return df
     return all_player_data
@@ -50,58 +55,23 @@ def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
 
 def get_player_data(player_id):
     data = api.get_player_data(player_id=player_id)
-
-    player_data = {
-        "id": player_id,
-        "name": data.get("fullName"),
-        "birthdate": data.get("birthDate"),
-        "currentAge": data.get("currentAge"),
-        "birthCountry": data.get("birthCountry"),
-        "height": data.get("height"),
-        "weight": data.get("weight"),
-        "active": data.get("active"),
-        "position": data.get("primaryPosition", {}).get("name"),
-        "debut": data.get("mlbDebutDate"),
-        "bats": data.get("batSide", {}).get("description"),
-        "throws": data.get("pitchHand", {}).get("description"),
-        "photo_url": f"https://img.mlbstatic.com/mlb-photos/image/upload/d_people:generic:headshot:67:current.png/w_426,q_auto:best/v1/people/{player_id}/headshot/67/current",
-    }
-
-    stat_data = data.get("stats", [])[0].get("splits")
+    player_data = grab_player_data(data)
+    position_data = grab_position_data(data.get("primaryPosition"))
+    raw_stats = data.get("stats", [{}])[0].get("splits")
 
     all_seasons = []
-    for r in stat_data:
-        season = r.get("season", "n/a")
-        stats = r.get("stat", {})
-        team = r.get("team", {})
-        all_seasons.append(
-            {
-                "Season": season,
-                "Team": team.get("name"),
-                "TeamId": team.get("id"),
-                "Age": stats.get("age"),
-                "G": stats.get("gamesPlayed"),
-                "R": stats.get("runs"),
-                "2B": stats.get("doubles"),
-                "3B": stats.get("triples"),
-                "HR": stats.get("homeRuns"),
-                "SO": stats.get("strikeOuts"),
-                "CS": stats.get("caughtStealing"),
-                "GDP": stats.get("groundIntoDoublePlay"),
-                "H": stats.get("hits"),
-                "SB": stats.get("stolenBases"),
-                "BB": stats.get("baseOnBalls"),
-                "HBP": stats.get("hitByPitch"),
-                "IBB": stats.get("intentionalWalks"),
-                "AB": stats.get("atBats"),
-                "PA": stats.get("plateAppearances"),
-                "RBI": stats.get("rbi"),
-                "SH": stats.get("sacBunts"),
-                "SF": stats.get("sacFlies"),
-            }
-        )
+    all_stats = []
+
+    for stats in raw_stats:
+        season = stats.get("season", "n/a")
+        team_data = grab_team_data(stats.get("team", {}))
+        all_seasons.append({"team": team_data, "season": season})
+        new_stats = grab_stat_data(stats.get("stat", {}))
+        new_stats["season"] = season
+        all_stats.append(new_stats)
+
     df = (
-        pd.DataFrame(all_seasons)
+        pd.DataFrame(all_stats)
         .fillna("")
         .pipe(calc_1B)
         .pipe(calc_uBB)
@@ -115,9 +85,16 @@ def get_player_data(player_id):
         .pipe(calc_so_perc)
         .pipe(calc_bb_perc)
     )
-    player_data["stats"] = df.to_dict(orient="records")
+    all_stats = df.to_dict(orient="records")
 
-    return player_data
+    for i in range(len(all_seasons)):
+        all_seasons[i]["stats"] = all_stats[i]
+
+    return {
+        "stats": all_seasons,
+        "player": player_data,
+        "position": position_data,
+    }
 
 
 def get_all_standings(year=2025):

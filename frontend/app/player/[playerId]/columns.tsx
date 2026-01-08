@@ -1,7 +1,7 @@
 "use client";
 
 import { ColumnDef } from "@tanstack/react-table";
-import type { playerStats } from "../../types";
+import type { SinglePlayerStats } from "@/types/playerTypes";
 import { ArrowUpDown } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
@@ -16,110 +16,110 @@ const SortableHeader = ({ label, column }: { label: string; column: any }) => (
   </Button>
 );
 
-export const columns: ColumnDef<playerStats>[] = [
+export const columns: ColumnDef<SinglePlayerStats>[] = [
   {
-    accessorKey: "Season",
+    accessorKey: "season",
     header: "Season",
   },
+  // {
+  //   accessorKey: "",
+  //   header: "Age",
+  // },
   {
-    accessorKey: "Age",
-    header: "Age",
-  },
-  {
-    accessorKey: "Team",
+    accessorKey: "team.fullName",
     header: "Team",
   },
   {
-    accessorKey: "G",
+    accessorKey: "stats.G",
     header: "G",
     size: 10,
   },
   {
-    accessorKey: "PA",
+    accessorKey: "stats.PA",
     header: "PA",
     size: 10,
   },
   {
-    accessorKey: "AB",
+    accessorKey: "stats.AB",
     header: "AB",
     size: 10,
   },
   {
-    accessorKey: "R",
+    accessorKey: "stats.R",
     header: "R",
     size: 10,
   },
   {
-    accessorKey: "H",
+    accessorKey: "stats.H",
     header: "H",
     size: 10,
   },
   {
-    accessorKey: "2B",
+    accessorKey: "stats.2B",
     header: "2B",
     size: 10,
   },
   {
-    accessorKey: "3B",
+    accessorKey: "stats.3B",
     header: "3B",
     size: 10,
   },
   {
-    accessorKey: "HR",
+    accessorKey: "stats.HR",
     header: "HR",
     size: 10,
   },
   {
-    accessorKey: "RBI",
+    accessorKey: "stats.RBI",
     header: "RBI",
     size: 10,
   },
   {
-    accessorKey: "BB",
+    accessorKey: "stats.BB",
     header: "BB",
     size: 10,
   },
   {
-    accessorKey: "BB%",
+    accessorKey: "stats.BB%",
     header: "BB%",
     cell: ({ getValue }) => `${getValue<number>()} %`,
   },
   {
-    accessorKey: "SO",
+    accessorKey: "stats.SO",
     header: "SO",
     size: 10,
   },
   {
-    accessorKey: "SO%",
+    accessorKey: "stats.SO%",
     header: "SO%",
     cell: ({ getValue }) => `${getValue<number>()} %`,
   },
   {
-    accessorKey: "AVG",
+    accessorKey: "stats.AVG",
     header: "AVG",
   },
   {
-    accessorKey: "OBP",
+    accessorKey: "stats.OBP",
     header: "OBP",
   },
   {
-    accessorKey: "SLG",
+    accessorKey: "stats.SLG",
     header: "SLG",
   },
   {
-    accessorKey: "ISO",
+    accessorKey: "stats.ISO",
     header: "ISO",
   },
   {
-    accessorKey: "wOBA",
+    accessorKey: "stats.wOBA",
     header: "wOBA",
   },
   {
-    accessorKey: "wRAA",
+    accessorKey: "stats.wRAA",
     header: "wRAA",
   },
   {
-    accessorKey: "RC",
+    accessorKey: "stats.RC",
     header: "RC",
   },
 ];
