@@ -7,6 +7,7 @@ import { DataTable } from "./data-table";
 import { columns } from "./columns";
 import Filter from "./filters";
 import Summary from "./summary";
+import ChartTest from "./chart-test";
 import type { playerListResponse, playerListSummary } from "@/types/types";
 
 export default function Home() {
@@ -50,7 +51,8 @@ export default function Home() {
       </div>
       {hasLoaded ? (
         <div className="px-10 pt-5 flex-1">
-          <DataTable columns={columns} data={playerData} />
+          {/* <DataTable columns={columns} data={playerData} /> */}
+          <ChartTest rawData={playerData} xStat="AVG" yStat="HR" />
         </div>
       ) : (
         <div className="w-full flex-1">

@@ -11,7 +11,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { allTeamData } from "../helperData";
-import type { teamData } from "../types";
+import type { teamData } from "@/types/teamTypes";
 
 export default function Filter({
   year,
@@ -61,7 +61,7 @@ export default function Filter({
           <SelectContent>
             {allTeamData.map((team: teamData) => (
               <SelectItem value={String(team.id)} key={team.id}>
-                {team.team_name}
+                {team.fullName}
               </SelectItem>
             ))}
           </SelectContent>
