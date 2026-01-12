@@ -50,6 +50,11 @@ def calc_bb_perc(df: DataFrame):
     return df
 
 
+def calc_hr_perc(df: DataFrame):
+    df["HR%"] = ((df["HR"] / df["PA"]) * 100).round(2)
+    return df
+
+
 def calc_woba(df: DataFrame):
     def row_woba(r):
         weights = weights_by_year[int(r["season"])]
@@ -82,9 +87,6 @@ def calc_wraa(df: DataFrame):
     return df
 
 
-# ((H + BB – CS + HBP – GDP) * ((1B + (2*2B) + (3*3B) + (4*HR) + (.26 * (BB – IBB + HBP)) + (.52 * (SH + SF + SB)))))
-#
-# (AB + BB + HBP + SF + SH)
 def calc_rc(df: DataFrame):
     on_base = df["H"] + df["BB"] - df["CS"] + df["HBP"] - df["GDP"]
     total_bases = df["1B"] + (2 * df["2B"]) + (3 * df["3B"]) + (4 * df["HR"])
@@ -95,4 +97,31 @@ def calc_rc(df: DataFrame):
     df["RC"] = round(
         (on_base * (total_bases + walk_value + sacrifice_value)) / bottom, 1
     )
+    return df
+
+
+def calc_wRC(df: DataFrame):
+    def row_wRC(r):
+        weights = weights_by_year[int(r["season"])]
+        league_woba = weights["wOBA"]
+        woba_scale = weights["wOBAScale"]
+        league_R_PA = weights["R/PA"]
+        return round(
+            (((r["wOBA"] - league_woba) / woba_scale) + (league_R_PA)) * r["PA"], 0
+        )
+
+    df["wRC"] = df.apply(row_wRC, axis=1)
+    return df
+
+
+def calc_wRC_plus(df: DataFrame):
+    def row_wRC_plus(r):
+        if r["PA"] == 0:
+            return 0
+        weights = weights_by_year[int(r["season"])]
+        league_R_PA = weights["R/PA"]
+        output = (r["wRAA"] / r["PA"]) + league_R_PA
+        return output
+
+    df["wRC+"] = df.apply(row_wRC_plus, axis=1)
     return df

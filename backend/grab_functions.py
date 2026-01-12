@@ -22,7 +22,7 @@ def grab_stat_data(stats):
         "LOB": stats.get("leftOnBase"),
         "SH": stats.get("sacBunts"),
         "SF": stats.get("sacFlies"),
-        "CI": stats.get("carchersInterference"),
+        "CI": stats.get("catchersInterference"),
     }
 
 

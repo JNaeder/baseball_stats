@@ -9,6 +9,7 @@ import Filter from "./filters";
 import Summary from "./summary";
 import ChartTest from "./chart-test";
 import type { playerListResponse, playerListSummary } from "@/types/types";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 export default function Home() {
   const [hasLoaded, setHasLoaded] = useState<boolean>(false);
@@ -51,8 +52,18 @@ export default function Home() {
       </div>
       {hasLoaded ? (
         <div className="px-10 pt-5 flex-1">
-          {/* <DataTable columns={columns} data={playerData} /> */}
-          <ChartTest rawData={playerData} xStat="AVG" yStat="HR" />
+          <Tabs defaultValue="list">
+            <TabsList>
+              <TabsTrigger value="list">List</TabsTrigger>
+              <TabsTrigger value="chart">Chart</TabsTrigger>
+            </TabsList>
+            <TabsContent value="list">
+              <DataTable columns={columns} data={playerData} />
+            </TabsContent>
+            <TabsContent value="chart">
+              <ChartTest rawData={playerData} xStat="HR%" yStat="SO%" />
+            </TabsContent>
+          </Tabs>
         </div>
       ) : (
         <div className="w-full flex-1">

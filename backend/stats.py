@@ -33,7 +33,7 @@ def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
 
     df = (
         pd.DataFrame(all_player_stats)
-        .fillna("")
+        .fillna(0)
         .pipe(calc_1B)
         .pipe(calc_uBB)
         .pipe(calc_avg)
@@ -44,6 +44,11 @@ def get_all_player_hitting_stats(year=2025, team_id=None, sportId=1):
         .pipe(calc_woba)
         .pipe(calc_wraa)
         .pipe(calc_rc)
+        .pipe(calc_so_perc)
+        .pipe(calc_bb_perc)
+        .pipe(calc_hr_perc)
+        .pipe(calc_wRC)
+        .pipe(calc_wRC_plus)
     )
     df_stat_data = df.to_dict(orient="records")
     for i in range(len(all_player_data)):
@@ -72,7 +77,7 @@ def get_player_data(player_id):
 
     df = (
         pd.DataFrame(all_stats)
-        .fillna("")
+        .fillna(0)
         .pipe(calc_1B)
         .pipe(calc_uBB)
         .pipe(calc_avg)

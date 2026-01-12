@@ -30,6 +30,10 @@ export default function ChartTest({
   const slope = (n * sumXY - sumX * sumY) / (n * sumX2 - sumX * sumX);
   const intercept = (sumY - slope * sumX) / n;
 
+  // Averages for axes
+  const avgX = sumX / n;
+  const avgY = sumY / n;
+
   // Get min and max values for both axes
   const minX = Math.min(...rawData.map((p) => p.stats[xStat]));
   const maxX = Math.max(...rawData.map((p) => p.stats[xStat]));
@@ -73,53 +77,96 @@ export default function ChartTest({
     );
   };
 
-  console.log(data);
-  console.log(rawData);
-  return (
-    <ResponsiveScatterPlot /* or ScatterPlot for fixed dimensions */
-      data={data}
-      margin={{ top: 60, right: 140, bottom: 70, left: 90 }}
-      colors={{ scheme: "category10" }}
-      xScale={{ type: "linear", min: minX - bufferX, max: maxX + bufferX }}
-      yScale={{ type: "linear", min: minY - bufferY, max: maxY + bufferY }}
-      axisBottom={{ legend: xStat, legendOffset: 46 }}
-      axisLeft={{ legend: yStat, legendOffset: -60 }}
-      layers={[
-        "grid",
-        "axes",
-        "nodes",
-        TrendLine,
-        "markers",
-        "mesh",
-        "legends",
-        "annotations",
-      ]}
-      tooltip={({ node }) => (
-        <div
-          style={{
-            background: "white",
-            padding: "9px 12px",
-            border: "1px solid #ccc",
-          }}
+  // Custom layer to draw average lines for both axes
+  const AverageLines = ({ xScale, yScale, innerWidth, innerHeight }: any) => {
+    const xPos = xScale(avgX);
+    const yPos = yScale(avgY);
+
+    return (
+      <g>
+        <line
+          x1={0}
+          x2={innerWidth}
+          y1={yPos}
+          y2={yPos}
+          stroke="#666"
+          strokeWidth={2}
+          strokeDasharray="4,4"
+        />
+        <line
+          x1={xPos}
+          x2={xPos}
+          y1={0}
+          y2={innerHeight}
+          stroke="#666"
+          strokeWidth={2}
+          strokeDasharray="4,4"
+        />
+        <text
+          x={innerWidth - 8}
+          y={yPos - 6}
+          textAnchor="end"
+          fill="#666"
+          fontSize={12}
         >
-          <strong>{node.data.name}</strong>
-          <br />
-          {xStat}: {node.data.x}
-          <br />
-          {yStat}: {node.data.y}
-        </div>
-      )}
-      legends={[
-        {
-          anchor: "bottom-right",
-          direction: "column",
-          translateX: 130,
-          itemWidth: 100,
-          itemHeight: 16,
-          itemsSpacing: 3,
-          symbolShape: "circle",
-        },
-      ]}
-    />
+          avg {yStat}: {avgY.toFixed(3)}
+        </text>
+        <text x={xPos + 6} y={12} textAnchor="start" fill="#666" fontSize={12}>
+          avg {xStat}: {avgX.toFixed(3)}
+        </text>
+      </g>
+    );
+  };
+
+  return (
+    <div style={{ height: "70vh", width: "100%" }}>
+      Slope: {slope.toFixed(4)}
+      <ResponsiveScatterPlot /* or ScatterPlot for fixed dimensions */
+        data={data}
+        margin={{ top: 60, right: 140, bottom: 70, left: 90 }}
+        colors={{ scheme: "category10" }}
+        xScale={{ type: "linear", min: minX - bufferX, max: maxX + bufferX }}
+        yScale={{ type: "linear", min: minY - bufferY, max: maxY + bufferY }}
+        axisBottom={{ legend: xStat, legendOffset: 46 }}
+        axisLeft={{ legend: yStat, legendOffset: -60 }}
+        layers={[
+          "grid",
+          "axes",
+          "nodes",
+          TrendLine,
+          AverageLines,
+          "markers",
+          "mesh",
+          "legends",
+          "annotations",
+        ]}
+        tooltip={({ node }) => (
+          <div
+            style={{
+              background: "white",
+              padding: "9px 12px",
+              border: "1px solid #ccc",
+            }}
+          >
+            <strong>{node.data.name}</strong>
+            <br />
+            {xStat}: {node.data.x}
+            <br />
+            {yStat}: {node.data.y}
+          </div>
+        )}
+        legends={[
+          {
+            anchor: "bottom-right",
+            direction: "column",
+            translateX: 130,
+            itemWidth: 100,
+            itemHeight: 16,
+            itemsSpacing: 3,
+            symbolShape: "circle",
+          },
+        ]}
+      />
+    </div>
   );
 }

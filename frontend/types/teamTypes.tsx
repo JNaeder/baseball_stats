@@ -1,6 +1,6 @@
 export type teamData = {
   id: number;
-  season: number;
+  season?: number;
   fullName: string;
   shortName: string;
   abbreviation: string;

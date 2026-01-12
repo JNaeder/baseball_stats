@@ -7,6 +7,8 @@ import { columns } from "./columns";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Button } from "@/components/ui/button";
+import { RefreshCcw } from "lucide-react";
 
 const divisions = [
   "AL West",
@@ -24,7 +26,9 @@ export default function page() {
   const [year, setYear] = useState<number>(2025);
 
   const getData = async () => {
-    const res = await fetch(`http://127.0.0.1:8000/all_standings_by_year/2025`);
+    const res = await fetch(
+      `http://127.0.0.1:8000/all_standings_by_year/${year}`
+    );
     const data = await res.json();
 
     // console.log(data);
@@ -37,21 +41,26 @@ export default function page() {
 
   return (
     <div className="flex w-full ">
-      {/* <div className="w-fit">
-        <Label htmlFor="year">Season</Label>
-        <Input
-          id="year"
-          type="number"
-          value={year}
-          onChange={(e) => setYear(Number(e.target.value))}
-        />
-      </div> */}
       <Tabs defaultValue="division" className="flex-1 p-2">
-        <TabsList>
-          <TabsTrigger value="division">Division</TabsTrigger>
-          <TabsTrigger value="league">League</TabsTrigger>
-          <TabsTrigger value="mlb">MLB</TabsTrigger>
-        </TabsList>
+        <div className="flex items-center justify-center gap-20">
+          <div className="w-fit">
+            <Label htmlFor="year">Season</Label>
+            <Input
+              id="year"
+              type="number"
+              value={year}
+              onChange={(e) => setYear(Number(e.target.value))}
+            />
+          </div>
+          <TabsList>
+            <TabsTrigger value="division">Division</TabsTrigger>
+            <TabsTrigger value="league">League</TabsTrigger>
+            <TabsTrigger value="mlb">MLB</TabsTrigger>
+          </TabsList>
+          <Button onClick={() => getData()}>
+            <RefreshCcw />
+          </Button>
+        </div>
         <TabsContent value="mlb" className="px-5">
           <div className="font-bold text-2xl">MLB</div>
           <DataTable
@@ -95,21 +104,6 @@ export default function page() {
           })}
         </TabsContent>
       </Tabs>
-      <div>
-        {/* {teamStandings.map((teamstanding: teamStanding, i: number) => {
-          return (
-            <div key={i} className={"flex justify-evenly"}>
-              <div>{teamstanding.Name}</div>
-              <div>W%: {teamstanding["W%"].toFixed(3)} </div>
-              <div>xW%: {teamstanding["xW%"].toFixed(3)} </div>
-              <div>
-                Diff:{" "}
-                {((teamstanding["W%"] - teamstanding["xW%"]) * 100).toFixed(3)}{" "}
-              </div>
-            </div>
-          );
-        })} */}
-      </div>
     </div>
   );
 }
